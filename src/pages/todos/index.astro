@@ -9,11 +9,11 @@ const session = await getSession(Astro.request)
 //@ts-ignore
 const id = session.user_id;
 //@ts-ignore
-const token = Astro.cookies.get(import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token')?.value
+const token = Astro.cookies.get('__Secure-authjs.session-token')?.value
 
 const headers = new Headers();
 
-headers.append('Cookie', `${import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token'}=${token}`)
+headers.append('Cookie', `__Secure-authjs.session-token=${token}`)
 
 const rq = await fetch(`${import.meta.env.DOMAIN}/api/todos?user_id=${id}`, {
   headers: headers
