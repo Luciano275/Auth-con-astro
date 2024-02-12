@@ -1,0 +1,40 @@
+---
+import Layout from '../../layouts/TodoLayout.astro'
+import { getSession } from 'auth-astro/server'
+import type { Todo } from '../../lib/definitions'
+import Todos from '../../components/Todos.astro';
+
+const session = await getSession(Astro.request)
+
+//@ts-ignore
+const id = session.user_id;
+//@ts-ignore
+const token = Astro.cookies.get(import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token')?.value
+
+const headers = new Headers();
+
+headers.append('Cookie', `${import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token'}=${token}`)
+
+const rq = await fetch(`${import.meta.env.DOMAIN}/api/todos?user_id=${id}`, {
+  headers: headers
+})
+
+const rs: { todos: Todo[] } | null = !rq.ok ? null : await rq.json()
+
+---
+
+<Layout seoTitle="Lista de todos - Todo App" title={'Lista de todos'}>
+  <main class="p-5">
+    <a href="/todos/create" class="bg-green-500 py-2 px-4 rounded-xl text-white text-xl max-w-[300px] block text-center hover:bg-green-700">Crear todo</a>
+    {
+      !rs ? <h2 class="text-center text-2xl py-5">Server Error</h2>
+      : (
+        rs.todos.length ? (
+          <Todos todos={rs.todos} userId={id} />
+        ) : (
+          <h2 class="text-center text-2xl py-5">No hay todos</h2>
+        )
+      )
+    }
+  </main>
+</Layout>

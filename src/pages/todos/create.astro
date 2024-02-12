@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/TodoLayout.astro';
+import { FormAdd } from '../../components/Forms';
+import { getSession } from 'auth-astro/server';
+
+const session = await getSession(Astro.request);
+
+//@ts-ignore
+const userId: number = session.user_id;
+---
+
+<Layout seoTitle='Crear Todo - Todo App' title={'Crear todo'}>
+  <main class="p-5">
+    <FormAdd domain={import.meta.env.DOMAIN} userId={userId} client:load />
+  </main>
+</Layout>

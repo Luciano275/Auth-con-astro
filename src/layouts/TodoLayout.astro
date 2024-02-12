@@ -1,0 +1,70 @@
+---
+import { getSession } from 'auth-astro/server'
+import Header from '../components/Header.astro';
+
+interface Props {
+	seoTitle: string;
+  title: string;
+}
+
+const { seoTitle, title } = Astro.props;
+
+const session = await getSession(Astro.request)
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>{seoTitle}</title>
+	</head>
+	<body>
+		<Header />
+    <div class="p-5 flex flex-col sm:flex-row justify-between items-center mt-5 gap-y-10">
+      <h2 class="text-3xl">
+        <span class="text-neutral-400 font-extralight">/</span>
+        <span class="font-bold">{title}</span>
+      </h2>
+      <div class="flex justify-center items-start gap-5">
+        <div class="flex flex-col">
+          <h3 class="text-xl py-2">{session?.user?.name}</h3>
+          <p class="text-sm text-neutral-500">{session?.user?.email}</p>
+        </div>
+        <div class="w-full max-w-[70px]">
+          <img
+            src={session?.user?.image || ''}
+            alt={'Foto de perfil'}
+            class="w-full max-w-full h-auto rounded-full"
+          />
+        </div>
+      </div>
+    </div>
+		<slot />
+	</body>
+</html>
+<style is:global>
+	html {
+		font-family: system-ui, sans-serif;
+		scroll-behavior: smooth;
+	}
+	* {
+		box-sizing: border-box;
+	}
+	body {
+		overflow-x: hidden;
+	}
+	code {
+		font-family:
+			Menlo,
+			Monaco,
+			Lucida Console,
+			Liberation Mono,
+			DejaVu Sans Mono,
+			Bitstream Vera Sans Mono,
+			Courier New,
+			monospace;
+	}
+</style>

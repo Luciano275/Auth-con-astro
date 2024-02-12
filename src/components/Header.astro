@@ -1,0 +1,24 @@
+---
+import { getSession } from 'auth-astro/server';
+import Logout from '../components/Logout.astro'
+
+const isLoggedIn = !!(await getSession(Astro.request));
+const pathname = new URL(Astro.request.url).pathname;
+
+---
+
+<header class="bg-blue-600 p-4 text-white flex justify-between items-center">
+  <h1 class="text-3xl">
+    <a href="/">Authjs con Astro</a>
+  </h1>
+  <div class="flex gap-4 items-center">
+    <a href="/" class={`text-xl ${pathname === '/' ? 'text-white' : 'text-neutral-300'} hover:text-white`}>Inicio</a>
+    {
+      isLoggedIn ? (
+        <a href="/todos" class={`text-xl ${pathname === '/todos' ? 'text-white' : 'text-neutral-300'} hover:text-white`}>Todos</a>
+        <Logout />
+        )
+        : <a href="/login" class={`text-xl ${pathname === '/login' ? 'text-white' : 'text-neutral-300'} hover:text-white`}>Ingresar</a>
+      }
+  </div>
+</header>

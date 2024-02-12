@@ -1,0 +1,9 @@
+<button id="logout" class="bg-red-500 transition-colors py-2 px-4 rounded-xl hover:bg-red-600">Cerrar sesión</button>
+<script>
+  const { signOut } = await import("auth-astro/client")
+
+  document.querySelector("#logout")?.addEventListener('click', () => signOut({
+    redirect: true,
+    callbackUrl: '/login'
+  }))
+</script>

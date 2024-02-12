@@ -1,0 +1,35 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Iniciar Sesión - Todo App">
+  <main>
+		<h2 class="text-4xl text-center mt-4 p-5">Inciar sesión con</h2>
+		<div class="flex flex-col py-4 px-2 gap-4">
+			<button id="google-signin" class="mx-auto py-2 px-4 rounded-xl bg-neutral-100 w-full max-w-[350px] hover:bg-neutral-200 relative">
+        <img src="/google-logo.svg" alt="Logo" class="absolute left-4">
+        Google
+      </button>
+			<button id="github-signin" class="mx-auto py-2 px-4 rounded-xl bg-neutral-800 text-white w-full max-w-[350px] hover:bg-neutral-700 relative">
+        <img src="/github-logo.svg" alt="Logo" class="w-[25px] absolute left-4">
+        GitHub
+      </button>
+		</div>
+	</main>
+  <script>
+
+		const { signIn } = await import("auth-astro/client")
+
+		const $googleButton = document.getElementById('google-signin');
+		const $githubButton = document.getElementById('github-signin');
+
+		$googleButton?.addEventListener('click', () => {
+			signIn('google')
+		})
+
+		$githubButton?.addEventListener('click', () => {
+			signIn('github')
+		})
+
+	</script>
+</Layout>

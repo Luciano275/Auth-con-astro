@@ -1,0 +1,34 @@
+---
+import Layout from '@layouts/TodoLayout.astro';
+import { getSession } from 'auth-astro/server';
+import type { Todo } from 'src/lib/definitions';
+import { FormEdit } from '@components/Forms'
+
+const session = await getSession(Astro.request);
+const headers = new Headers();
+const token = Astro.cookies.get(import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token')?.value
+
+headers.append('Cookie', `${import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token'}=${token}`)
+
+//@ts-ignore
+const user_id = session.user_id;
+const { id } = Astro.params;
+
+const rq = await fetch(`${import.meta.env.DOMAIN}/api/todos/${id}?user_id=${user_id}`, {
+  credentials: 'include',
+  headers: headers
+})
+
+const rs: null | { todo: Todo } = !rq.ok ? null : await rq.json();
+
+---
+
+<Layout seoTitle='Editar Todo - Todo App' title={'Editar todo'}>
+  <main class="p-5">
+    {
+      rq.status === 404 ? <h2 class="text-center py-5 text-xl">No se encontró ningun Todo.</h2>
+      : !rs ? <h2 class="text-center py-5 text-xl">Server Error</h2>
+      : <FormEdit todo={rs.todo} userId={user_id} domain={import.meta.env.DOMAIN} client:load />
+    }
+  </main>
+</Layout>
