@@ -6,9 +6,9 @@ import { FormEdit } from '@components/Forms'
 
 const session = await getSession(Astro.request);
 const headers = new Headers();
-const token = Astro.cookies.get(import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token')?.value
+const token = Astro.cookies.get('__Secure-authjs.session-token')?.value
 
-headers.append('Cookie', `${import.meta.env.MODE === 'development' ? 'authjs.session-token' : '__Secure-authjs.session-token'}=${token}`)
+headers.append('Cookie', `__Secure-authjs.session-token=${token}`)
 
 //@ts-ignore
 const user_id = session.user_id;
