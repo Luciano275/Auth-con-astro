@@ -8,8 +8,6 @@ export const formatDate = (fechaActual: Date) => {
     year: 'numeric',
     month: 'numeric',
     day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
     timeZone
   });
   const fechaFormateada = formatoFechaLocal.format(fechaActual);
